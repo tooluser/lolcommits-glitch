@@ -1,6 +1,9 @@
 # Lolcommits Glitch
 Glitch it up.
 
+![glitch commit](https://github.com/tooluser/lolcommits-glitch/raw/master/assets/images/96385860786.jpg)
+![glitch commit](https://github.com/tooluser/lolcommits-glitch/raw/master/assets/images/ab409ebe370.jpg)
+
 ## Installation
 
 Follow the [install guide](https://github.com/mroth/lolcommits#installation) for
