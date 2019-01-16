@@ -37,12 +37,9 @@ module Lolcommits
       end
 
       def run_post_capture
-        debug "In Image: '#{runner.main_image}'"
-        
         images = Magick::Image.read(runner.main_image)        
         in_image = images.first
         
-        debug "In Image: #{in_image.inspect}"
         debug "Glitching…"
         
         glitch_image = glitch_image(in_image)
@@ -72,7 +69,6 @@ module Lolcommits
 
       private def glitch_image(image)
         glitch_image = image.dup
-        debug "Out Image: #{glitch_image.inspect}"
         
         width = image.columns
         height = image.rows
