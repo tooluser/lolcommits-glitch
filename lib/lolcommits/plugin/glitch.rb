@@ -39,10 +39,12 @@ module Lolcommits
       def run_post_capture
         images = Magick::Image.read(runner.main_image)        
         in_image = images.first
+        glitch_image = in_image
         
-        debug "Glitching…"
-        
-        glitch_image = glitch_image(in_image)
+        if rand(100) < config_option(:glitch_probability)
+          debug "Glitching…"
+          glitch_image = glitch_image(in_image)
+        end
 
         glitch_image.write runner.main_image
       end
@@ -58,6 +60,7 @@ module Lolcommits
       def default_options
         {
           glitch_level: 7,
+          glitch_probability: 100,
         }
       end
 
