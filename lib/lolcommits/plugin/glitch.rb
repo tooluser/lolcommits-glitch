@@ -1,5 +1,7 @@
-require 'lolcommits/plugin/base'
+require "lolcommits/plugin/base"
 require "rmagick"
+require "faker"
+
 include Magick
 
 module Lolcommits
@@ -38,6 +40,7 @@ module Lolcommits
         images = Magick::Image.read(runner.main_image)
         glitch_image = image = images.first
 
+        wax_poetic
         if rand(100) < config_option(:glitch_probability)
           debug "Glitching #{width(image)} x #{height(image)} #{config_option(:glitch_level)} times"
           glitch_image = glitch_image(image)
@@ -58,6 +61,21 @@ module Lolcommits
       end
 
       private
+
+      def wax_poetic
+        chance = config_option(:glitch_probability)
+        phrase = [
+          Faker::Hacker.say_something_smart,
+          [Faker::Hacker.ingverb, Faker::Hacker.adjective, Faker::Hacker.noun].join(" "),
+          Faker::Company.bs,
+          Faker::ChuckNorris.fact,
+          "awaiting particle strike",
+          "detecting particle spin",
+          "flipping #{chance} coins",
+          "rolling D#{chance}",
+        ].sample
+        puts "Glitch probability generator warming up... #{phrase}"
+      end
 
       def glitch_image(image)
         image.dup.tap do |glitch_image|
