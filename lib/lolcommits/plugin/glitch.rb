@@ -5,7 +5,9 @@ include Magick
 module Lolcommits
   module Plugin
     class Glitch < Base
-      
+      DEFAULT_GLITCH_LEVEL = 7
+      DEFAULT_GLITCH_CHANCE = 100
+
       COMPOSITE_OPERATORS = [
         Magick::AddCompositeOp,
         Magick::AtopCompositeOp,
@@ -32,71 +34,70 @@ module Lolcommits
         Magick::XorCompositeOp,
       ]
 
-      def initialize(runner: nil, name: nil, config: nil)
-        super
-      end
-
       def run_post_capture
-        images = Magick::Image.read(runner.main_image)        
-        in_image = images.first
-        glitch_image = in_image
-        
+        images = Magick::Image.read(runner.main_image)
+        glitch_image = image = images.first
+
         if rand(100) < config_option(:glitch_probability)
-          debug "Glitching…"
-          glitch_image = glitch_image(in_image)
+          debug "Glitching #{width(image)} x #{height(image)} #{config_option(:glitch_level)} times"
+          glitch_image = glitch_image(image)
         end
 
         glitch_image.write runner.main_image
       end
 
-      def enabled?
-        super
-      end
-
-      def configure_options!
-        super
-      end
-
       def default_options
         {
-          glitch_level: 7,
-          glitch_probability: 100,
+          glitch_level: DEFAULT_GLITCH_LEVEL,
+          glitch_probability: DEFAULT_GLITCH_CHANCE,
         }
       end
 
       def valid_configuration?
-        @configuration != nil && @configuration[:glitch_level] != nil
+        !@configuration.nil? && !@configuration[:glitch_level].nil?
       end
 
       private
 
-      private def glitch_image(image)
-        glitch_image = image.dup
-        
-        width = image.columns
-        height = image.rows
-        
-        debug "Glitching #{width} x #{height} #{config_option(:glitch_level)} times"
-        
-        config_option(:glitch_level).times do
-          start_x = rand(0...width)
-          start_y = rand(0...height)
-
-          debug "   …Glitching…"
-
-          case rand(1..4)
-          when 1
-            glitch_image.composite!(image, start_x, start_y, COMPOSITE_OPERATORS.sample)
-          when 2
-            glitch_image.composite!(image, -start_x, start_y, COMPOSITE_OPERATORS.sample)
-          when 3
-            glitch_image.composite!(image, start_x, -start_y, COMPOSITE_OPERATORS.sample)
-          when 4
-            glitch_image.composite!(image, -start_x, -start_y, COMPOSITE_OPERATORS.sample)
+      def glitch_image(image)
+        image.dup.tap do |glitch_image|
+          config_option(:glitch_level).times do
+            debug_glitch_iteration glitch_args = glitch_args_for(image)
+            glitch_image.composite!(*glitch_args)
           end
         end
+      end
 
-        glitch_image
+      def debug_glitch_iteration(args)
+        debug "…Glitching… with #{"%-#{COMPOSITE_OPERATORS.map(&:to_s).map(&:length).max}s" % args[3]} @ #{args[1..2]}"
+      end
+
+      # dont memoize!
+      def glitch_args_for(image)
+        [
+          image,
+          glitch_at_x(image),
+          glitch_at_y(image),
+          COMPOSITE_OPERATORS.sample,
+        ]
+      end
+
+      # dont memoize!
+      def glitch_at_x(image)
+        rand(0...width(image)) * [-1, 1].sample
+      end
+
+      # dont memoize!
+      def glitch_at_y(image)
+        rand(0...height(image)) * [-1, 1].sample
+      end
+
+      def width(image)
+        @width ||= image.columns
+      end
+
+      def height(image)
+        @height ||= image.rows
       end
     end
   end
