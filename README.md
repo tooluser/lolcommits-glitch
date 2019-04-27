@@ -6,7 +6,7 @@ Glitch it up.
 
 ## Installation
 
-Follow the [install guide](https://github.com/mroth/lolcommits#installation) for
+Follow the [install guide](https://github.com/lolcommits/lolcommits#installation) for
 lolcommits first. Then run the following:
 
 	$ gem build lolcommits-glitch.gemspec
@@ -24,7 +24,7 @@ Lolcommits Glitch uses RMagick, which relies upon ImageMagick 6. If you have onl
 PKG_CONFIG_PATH=/usr/local/Cellar/imagemagick@6/6.9.10-14/lib/pkgconfig/ gem install rmagick -v '2.16.0' -- --with-opt-lib=/usr/local/Cellar/imagemagick@6/6.9.10-14/lib/ --with-opt-include=/usr/local/Cellar/imagemagick/6.9.10-14/include/ImageMagick-6/
 ```
 
-There is no need to unlink 7. 
+There is no need to unlink 7.
 
 ## Development
 
@@ -37,7 +37,7 @@ experiment with the gem code.
 
 ## Tests
 
-In the spirit of glitching, there are no tests. 
+In the spirit of glitching, there are no tests.
 
 ## License
 
