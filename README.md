@@ -20,9 +20,7 @@ Next configure and enable this plugin with:
 ## Requirements
 Lolcommits Glitch uses RMagick, which relies upon ImageMagick 6. If you have only 7 installed, you will receive an error about a missing header. To install 6 in parallel with 7:
 
-```
-PKG_CONFIG_PATH=/usr/local/Cellar/imagemagick@6/6.9.10-14/lib/pkgconfig/ gem install rmagick -v '2.16.0' -- --with-opt-lib=/usr/local/Cellar/imagemagick@6/6.9.10-14/lib/ --with-opt-include=/usr/local/Cellar/imagemagick/6.9.10-14/include/ImageMagick-6/
-```
+`PKG_CONFIG_PATH=/usr/local/Cellar/imagemagick@6/6.9.10-43/lib/pkgconfig/ gem install rmagick -v '3.0.0'`
 
 There is no need to unlink 7. 
 
