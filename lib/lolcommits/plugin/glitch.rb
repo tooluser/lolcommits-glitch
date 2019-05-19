@@ -37,16 +37,18 @@ module Lolcommits
       ]
 
       def run_post_capture
-        images = Magick::Image.read(runner.main_image)
-        glitch_image = image = images.first
-
+        debug "Glitching is enabled with Probability: #{config_option(:glitch_probability)} and Level: #{config_option(:glitch_level)}"
         wax_poetic
+
         if rand(100) < config_option(:glitch_probability)
+          images = Magick::Image.read(runner.main_image)
+          glitch_image = image = images.first
           debug "Glitching #{width(image)} x #{height(image)} #{config_option(:glitch_level)} times"
           glitch_image = glitch_image(image)
+          glitch_image.write runner.main_image
+        else
+          debug "No Glitching this time, probability wasn't met"
         end
-
-        glitch_image.write runner.main_image
       end
 
       def default_options
@@ -57,7 +59,7 @@ module Lolcommits
       end
 
       def valid_configuration?
-        !@configuration.nil? && !@configuration[:glitch_level].nil?
+        !config_option(:glitch_level).nil? && !config_option(:glitch_probability).nil?
       end
 
       private
@@ -74,7 +76,7 @@ module Lolcommits
           "flipping #{chance} coins",
           "rolling D#{chance}",
         ].sample
-        puts "Glitch probability generator warming up... #{phrase}"
+        puts "*** Glitch probability generator warming up... #{phrase}"
       end
 
       def glitch_image(image)
