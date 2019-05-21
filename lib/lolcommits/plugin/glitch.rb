@@ -37,16 +37,20 @@ module Lolcommits
       ]
 
       def run_post_capture
-        images = Magick::Image.read(runner.main_image)
-        glitch_image = image = images.first
+        if runner.capture_image?
+          images = Magick::Image.read(runner.lolcommit_path)
+          glitch_image = image = images.first
 
-        wax_poetic
-        if rand(100) < config_option(:glitch_probability)
-          debug "Glitching #{width(image)} x #{height(image)} #{config_option(:glitch_level)} times"
-          glitch_image = glitch_image(image)
+          wax_poetic
+          if rand(100) < config_option(:glitch_probability)
+            debug "Glitching #{width(image)} x #{height(image)} #{config_option(:glitch_level)} times"
+            glitch_image = glitch_image(image)
+          end
+
+          glitch_image.write runner.lolcommit_path
+        else
+          debug "no image to glitch for a video or gif lolcommit"
         end
-
-        glitch_image.write runner.main_image
       end
 
       def default_options
