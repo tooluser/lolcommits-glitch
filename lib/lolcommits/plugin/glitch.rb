@@ -37,7 +37,7 @@ module Lolcommits
       ]
 
       def run_post_capture
-        images = Magick::Image.read(runner.main_image)
+        images = Magick::Image.read(runner.lolcommit_path)
         glitch_image = image = images.first
 
         wax_poetic
@@ -46,7 +46,7 @@ module Lolcommits
           glitch_image = glitch_image(image)
         end
 
-        glitch_image.write runner.main_image
+        glitch_image.write runner.lolcommit_path
       end
 
       def default_options
